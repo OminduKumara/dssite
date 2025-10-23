@@ -20,12 +20,8 @@
   }
 
   /* Layout */
-  .wrap{display:grid; grid-template-columns: 260px 1fr; gap:24px; padding:28px; height:100vh;}
-  .sidebar{
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border:1px solid var(--glass-border); border-radius:12px; padding:18px; position:relative;
-    box-shadow: 0 6px 30px rgba(0,0,0,0.6);
-  }
+  .wrap{display:block; padding:28px; min-height:100vh; max-width:1100px; margin:0 auto}
+  /* removed sidebar; single-column layout centered */
   .brand{display:flex; gap:12px; align-items:center; margin-bottom:12px}
   .logo{width:44px; height:44px; display:grid; place-items:center; border-radius:10px; background:linear-gradient(135deg,var(--accent), #00c2ff); box-shadow:0 6px 18px rgba(124,58,237,0.18)}
   .logo svg{width:26px;height:26px}
@@ -43,8 +39,8 @@
   .small{font-size:12px;color:var(--muted); margin-left:8px}
 
   .main{
-    overflow:auto; padding:24px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-    border:1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+    overflow:auto; padding:24px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.006));
+    border:1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 40px rgba(2,6,23,0.55);
   }
   header.top{
     display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:18px;
@@ -63,7 +59,8 @@
   .toggle input{display:none}
 
   /* Content cards */
-  .card{background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:10px; padding:18px; margin-bottom:18px; border:1px solid var(--glass-border)}
+  .card{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.006)); border-radius:14px; padding:22px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.04); backdrop-filter: blur(6px); box-shadow: 0 6px 30px rgba(2,6,23,0.55); transition: transform .18s ease, box-shadow .18s ease}
+  .card:hover{transform: translateY(-6px); box-shadow: 0 18px 50px rgba(2,6,23,0.6)}
   .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
   h3{margin:0 0 10px 0;color:#cfe4ff}
   p.lead{color:var(--muted); margin-top:6px; margin-bottom:12px}
@@ -79,10 +76,63 @@
   .acc-body.open{max-height:2000px; transition:max-height .6s cubic-bezier(.2,.9,.2,1)}
 
   pre.chat{
-    background: linear-gradient(180deg, rgba(10,14,20,0.6), rgba(10,14,20,0.4));
-    border-radius:8px; padding:14px; border:1px solid rgba(255,255,255,0.02);
-    overflow:auto; font-family: var(--mono); font-size:12px; color:#dff3ff; white-space:pre-wrap;
+    background: linear-gradient(180deg, rgba(6,10,16,0.65), rgba(10,14,20,0.5));
+    border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,0.045);
+    overflow:auto; font-family: var(--mono); font-size:13px; color:#e8f8ff; white-space:pre-wrap; line-height:1.45;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 8px 30px rgba(2,6,23,0.6);
+    position:relative; transition: transform .15s ease;
+    max-height:420px; padding-top:22px;
   }
+
+  /* wrapper and header added dynamically */
+  .chat-wrapper{margin-top:12px; border-radius:12px; overflow:hidden}
+  .chat-header{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 12px; background:transparent; border-bottom:1px solid rgba(15,23,42,0.04); font-size:13px}
+  .chat-title{color:#0b2540; font-weight:700}
+  .chat-actions{display:flex; gap:8px; align-items:center}
+  .chat-copy-btn{background:transparent; border:1px solid rgba(15,23,42,0.06); color:#0b2540; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:13px}
+  .chat-copy-btn:hover{background:rgba(15,23,42,0.02); box-shadow:none}
+  .chat-collapse-btn{background:transparent; border:none; color:var(--muted); cursor:pointer}
+  .chat-download-btn{background:transparent; border:1px solid rgba(15,23,42,0.06); color:#0b2540; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:13px}
+  .chat-download-btn:hover{background:rgba(15,23,42,0.02)}
+  .chat-icon{width:14px; height:14px; display:inline-block; margin-right:8px; vertical-align:middle; opacity:0.95}
+  .chat-copy-btn:focus, .chat-download-btn:focus, .chat-collapse-btn:focus{outline:2px solid rgba(124,58,237,0.22); outline-offset:2px}
+
+  /* formatted chat content styles */
+  .chat-body{padding:14px 12px; color:var(--text); background:transparent}
+  /* polished chat panel visuals */
+  /* normal web detail card style */
+  .chat-panel{
+    background: linear-gradient(180deg,#ffffff, #fbfdff);
+    border-radius:10px; padding:16px; border:1px solid rgba(15,23,42,0.04);
+    box-shadow: 0 6px 24px rgba(15,23,42,0.08);
+    transition: transform .12s ease, box-shadow .12s ease; margin-top:10px; overflow:hidden;
+  }
+  .chat-panel:hover{transform:translateY(-4px); box-shadow:0 12px 36px rgba(15,23,42,0.10)}
+  .chat-section h4{margin:6px 0 8px 0; color:#0b2540; font-size:14px}
+  .chat-paragraph{margin:6px 0; color:#334155; font-size:14px; line-height:1.6}
+  .chat-body .chat-paragraph:first-of-type{font-size:15px; color:#0b2540; font-weight:600; margin-bottom:10px}
+  .chat-list{margin:6px 0 6px 18px; color:var(--muted)}
+  .chat-list li{margin:4px 0}
+  .chat-meta{font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:8px}
+  .chat-heading{font-size:15px; color:#0b2540; font-weight:700; margin:8px 0}
+  .chat-subheading{font-size:13px; color:#0b3a5a; font-weight:600; margin:6px 0}
+  .chat-section{padding:12px 14px; border-left:4px solid rgba(14,165,233,0.12); background:transparent; margin-bottom:12px; border-radius:6px}
+  .chat-heading.badge{display:inline-block; padding:6px 10px; background:linear-gradient(90deg, rgba(14,165,233,0.12), rgba(14,165,233,0.06)); border-radius:8px; color:#0b2540}
+  .chat-paragraph.leading{font-size:14px; color:#0b2540; margin-bottom:10px}
+  pre.chat-code{background:#0f1724; padding:10px 12px; border-radius:6px; font-family:var(--mono); color:#dff3ff; overflow:auto; border:1px solid rgba(2,6,23,0.12)}
+  .chat-list{margin:6px 0 6px 22px; color:#475569}
+  .chat-raw-toggle{background:transparent; border:1px solid rgba(15,23,42,0.06); padding:6px 8px; border-radius:8px; cursor:pointer; color:#0b2540; font-size:13px}
+  .chat-raw-toggle:focus{outline:2px solid rgba(14,165,233,0.22); outline-offset:2px}
+
+  /* custom scrollbar for pre.chat */
+  pre.chat::-webkit-scrollbar{height:10px; width:10px}
+  pre.chat::-webkit-scrollbar-thumb{background:linear-gradient(180deg, rgba(120,120,128,0.34), rgba(96,96,104,0.28)); border-radius:999px; border:1px solid rgba(255,255,255,0.04)}
+  pre.chat::-webkit-scrollbar-track{background:rgba(15,23,42,0.02); border-radius:999px}
+
+  /* Header search styling for single-column layout */
+  .header-search-wrap{margin-top:12px; display:flex; justify-content:flex-end}
+  .header-search{width:340px; max-width:100%; padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:var(--text); outline:none; font-size:13px}
+  .header-search:focus{box-shadow:0 6px 24px rgba(124,58,237,0.12); border-color:rgba(124,58,237,0.38)}
 
   .meta{display:flex; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:13px}
   .tag{padding:6px 10px; border-radius:999px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.02); color:var(--muted); font-size:12px}
@@ -95,9 +145,10 @@
 
   /* responsive */
   @media (max-width:900px){
-    .wrap{grid-template-columns:1fr; padding:12px}
-    .sidebar{order:2}
-    .main{order:1; height:calc(100vh - 140px)}
+    .wrap{padding:14px}
+    .main{height:auto}
+    .header-search-wrap{justify-content:stretch}
+    .header-search{width:100%}
   }
 
   /* search highlight */
@@ -106,41 +157,6 @@
 </head>
 <body>
 <div class="wrap">
-  <aside class="sidebar" role="navigation" aria-label="Sidebar">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">
-        <!-- simple icon -->
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="4" fill="white" opacity="0.12"/><path d="M6 12h12M12 6v12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div>
-        <h1>Distributed Payment — Full Chat</h1>
-        <p style="margin-top:6px;color:var(--muted);font-size:12px">One-page interactive export of your Copilot chat & assignment</p>
-      </div>
-    </div>
-
-    <input id="search" type="search" placeholder="Search inside text (e.g., Raft, WAL, TimeSync)">
-
-    <nav class="sidebar-nav" style="margin-top:12px">
-      <a href="#assignment">📜 Assignment Summary <span class="small">top</span></a>
-      <a href="#copilot">🤖 Copilot Analysis</a>
-      <a href="#member1">👤 Member 1 — Fault Tolerance</a>
-      <a href="#member2">👥 Member 2 — Replication & Consistency</a>
-      <a href="#member3">⏱ Member 3 — Time Synchronization</a>
-      <a href="#member4">🔗 Member 4 — Consensus & Raft</a>
-      <a href="#evaluation">✅ Overall Evaluation</a>
-      <a href="#fullchat">🗂 Full Copilot Chat (raw)</a>
-    </nav>
-
-    <div style="position:absolute; bottom:18px; left:18px; right:18px;">
-      <div class="meta" style="margin-top:8px">
-        <div class="tag">One file</div>
-        <div class="tag">Dark UI</div>
-        <div class="tag">Searchable</div>
-      </div>
-      <div style="margin-top:12px;font-size:12px;color:var(--muted)">Tip: Use the search box above to highlight terms. Accordions keep everything readable.</div>
-    </div>
-  </aside>
-
   <main class="main" id="main">
     <header class="top">
       <div class="title">
@@ -151,10 +167,14 @@
         <div class="chip">One-page • Full text</div>
         <div class="chip" id="copyAll" style="cursor:pointer">Copy HTML</div>
       </div>
+      <!-- relocated search into header for compact single-column layout -->
+      <div class="header-search-wrap">
+        <input id="search" type="search" class="header-search" placeholder="Search inside text (e.g., Raft, WAL, TimeSync)">
+      </div>
     </header>
 
     <!-- Assignment -->
-    <section class="card" id="assignment">
+  <section class="card" id="assignment">
       <h3>Assignment Description</h3>
       <p class="lead">Full assignment text (kept verbatim below). Expand to view the exact content provided in your chat.</p>
 
@@ -228,7 +248,7 @@ Overall Integration	20%	Seamless operation of all components and scalability of 
           </div>
         </div>
       </div>
-    </section>
+  </section>
 
     <!-- Copilot Analysis -->
     <section class="card" id="copilot">
@@ -763,8 +783,16 @@ Tasks:
       </div>
     </section>
 
-    <footer>
-      <div style="opacity:0.9">Need edits? Ask me to: (1) generate Windows start/stop scripts, (2) create testing harness, or (3) write the 10–12 page report & slides. I can produce them next.</div>
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+      <div class="meta">
+        <div class="tag">One file</div>
+        <div class="tag">Dark UI</div>
+        <div class="tag">Searchable</div>
+      </div>
+      <div style="color:var(--muted); font-size:13px">Need edits? Ask me to: (1) generate Windows start/stop scripts, (2) create testing harness, or (3) write the 10–12 page report & slides.</div>
+    </div>
+    <footer style="margin-top:18px; text-align:center; color:var(--muted); font-size:13px">
+      <div style="opacity:0.9">Tip: Use the search box above to highlight terms. Accordions keep everything readable.</div>
     </footer>
   </main>
 </div>
@@ -832,6 +860,249 @@ Tasks:
       alert('Copy failed — your browser may block clipboard. You can save page source manually.');
     }
   });
+
+  // Simple parser: convert raw text into formatted HTML
+  function renderFormattedFromText(text){
+    // basic approach: split into lines and detect headings, lists and paragraphs
+    const lines = text.split(/\r?\n/);
+    let html = '';
+    let inUl = false;
+    let inOl = false;
+    let inSection = false;
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if(!trimmed){
+        // blank line -> close lists
+        if(inUl){ html += '</ul>'; inUl=false }
+        if(inOl){ html += '</ol>'; inOl=false }
+        if(inSection){ html += '</div>'; inSection=false }
+        html += '<div style="height:6px"></div>';
+        return;
+      }
+      // top-level Scenario or Tasks headings
+      if(/^Scenario\s*:/i.test(trimmed)){
+        html += `<div class="chat-heading">${escapeHtml(trimmed.replace(/^Scenario\s*:/i,'')) ? 'Scenario' : 'Scenario'}</div>`;
+        // include remainder as paragraph
+        const remainder = trimmed.replace(/^Scenario\s*:/i,'').trim();
+        if(remainder) html += `<div class="chat-paragraph">${escapeHtml(remainder)}</div>`;
+        return;
+      }
+      if(/^Tasks\s*:/i.test(trimmed)){
+        html += `<div class="chat-heading">Tasks</div>`;
+        const remainder = trimmed.replace(/^Tasks\s*:/i,'').trim();
+        if(remainder) html += `<div class="chat-paragraph">${escapeHtml(remainder)}</div>`;
+        return;
+      }
+      // Objective: or similar subheadings
+      if(/^Objective\s*:/i.test(trimmed) || /^Deliverables\s*:/i.test(trimmed) || /^Evaluation Criteria\s*:/i.test(trimmed)){
+        const parts = trimmed.split(':');
+        const k = parts.shift().trim();
+        const rest = parts.join(':').trim();
+        html += `<div class="chat-subheading">${escapeHtml(k)}</div>`;
+        if(rest) html += `<div class="chat-paragraph">${escapeHtml(rest)}</div>`;
+        return;
+      }
+      // numbered member heading like '1. Fault Tolerance (Member 1):'
+      if(/^\d+\.\s+/.test(trimmed) && /Member\s*\d+/i.test(trimmed)){
+        html += `<div class="chat-subheading">${escapeHtml(trimmed)}</div>`;
+        return;
+      }
+      // bullet list
+      if(/^[-*]\s+/.test(trimmed)){
+        if(inOl){ html += '</ol>'; inOl=false }
+        if(!inUl){ html += '<ul class="chat-list">'; inUl=true }
+        html += `<li>${escapeHtml(trimmed.replace(/^[-*]\s+/,''))}</li>`;
+        return;
+      }
+      // numbered list (generic)
+      if(/^\d+\.\s+/.test(trimmed) && !/Member\s*\d+/i.test(trimmed)){
+        if(inUl){ html += '</ul>'; inUl=false }
+        if(!inOl){ html += '<ol class="chat-list">'; inOl=true }
+        html += `<li>${escapeHtml(trimmed.replace(/^\d+\.\s+/,''))}</li>`;
+        return;
+      }
+      // start of numbered member section
+      if(/^\d+\.\s+/.test(trimmed) && /Member\s*\d+/i.test(trimmed)){
+        if(inSection){ html += '</div>'; inSection=false }
+        html += `<div class="chat-section"><div class="chat-subheading">${escapeHtml(trimmed)}</div>`;
+        inSection = true;
+        return;
+      }
+      // pre lines that look like code blocks (indent)
+      if(/^\s{2,}/.test(line)){
+        html += `<pre class="chat-code">${escapeHtml(line)}</pre>`;
+        return;
+      }
+      // default paragraph
+      html += `<div class="chat-paragraph">${escapeHtml(trimmed)}</div>`;
+    });
+    if(inUl) html += '</ul>';
+    if(inOl) html += '</ol>';
+    return html;
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;');
+  }
+
+  // Enhance pre.chat boxes: add header (title, copy, collapse) and interactions
+  function enhanceChatBoxes(){
+    const chats = Array.from(document.querySelectorAll('pre.chat'));
+    chats.forEach((pre, idx) => {
+      // avoid double-wrapping
+      if(pre.parentElement && pre.parentElement.classList.contains('chat-wrapper')) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'chat-wrapper';
+
+      const header = document.createElement('div');
+      header.className = 'chat-header';
+
+  const title = document.createElement('div');
+  title.className = 'chat-title';
+  title.textContent = pre.getAttribute('data-title') || 'Log / Chat';
+  // prepend icon span if it exists
+  const headerIcon = icon.cloneNode(true);
+  title.insertBefore(headerIcon, title.firstChild);
+
+      const actions = document.createElement('div');
+      actions.className = 'chat-actions';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'chat-copy-btn';
+      copyBtn.type = 'button';
+      copyBtn.textContent = 'Copy';
+      copyBtn.title = 'Copy contents to clipboard';
+    copyBtn.setAttribute('aria-label','Copy chat text');
+
+  const downloadBtn = document.createElement('button');
+  downloadBtn.className = 'chat-download-btn';
+  downloadBtn.type = 'button';
+  downloadBtn.textContent = 'Download';
+  downloadBtn.title = 'Download contents as .txt';
+  downloadBtn.setAttribute('aria-label','Download chat text');
+
+  // optional small icon in the header
+  const icon = document.createElement('span');
+  icon.className = 'chat-icon';
+  icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M12 3v10" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/><path d="M8 11l4 4 4-4" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/><rect x="3" y="17" width="18" height="4" rx="1.5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.04)"/></svg>';
+
+    const collapseBtn = document.createElement('button');
+    collapseBtn.className = 'chat-collapse-btn';
+    collapseBtn.type = 'button';
+    collapseBtn.textContent = '▾';
+    collapseBtn.title = 'Collapse / expand';
+  collapseBtn.setAttribute('aria-label','Collapse or expand chat');
+
+    // raw toggle button
+    const rawToggle = document.createElement('button');
+    rawToggle.className = 'chat-raw-toggle';
+    rawToggle.type = 'button';
+    rawToggle.textContent = 'Raw';
+    rawToggle.title = 'Show raw text';
+  rawToggle.setAttribute('aria-label','Toggle raw and rendered view');
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(downloadBtn);
+    actions.appendChild(rawToggle);
+    actions.appendChild(collapseBtn);
+    header.appendChild(title);
+    header.appendChild(actions);
+
+    // insert wrapper before pre
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(header);
+
+  // create chat panel wrapper to hold formatted view and raw pre
+  const panel = document.createElement('div');
+  panel.className = 'chat-panel';
+
+  // create a formatted preview element parsed from raw text
+  const formatted = document.createElement('div');
+  formatted.className = 'chat-body';
+  formatted.innerHTML = renderFormattedFromText(pre.textContent || '');
+  panel.appendChild(formatted);
+
+  // move raw pre after formatted preview and hide raw by default
+  panel.appendChild(pre);
+  pre.style.display = 'none';
+
+  wrapper.appendChild(panel);
+
+      // copy behavior
+      copyBtn.addEventListener('click', async ()=>{
+        try{
+          await navigator.clipboard.writeText(pre.textContent);
+          const old = copyBtn.textContent;
+          copyBtn.textContent = 'Copied';
+          setTimeout(()=> copyBtn.textContent = old, 1400);
+        }catch(e){
+          // fallback: select and prompt
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(pre);
+          selection.removeAllRanges(); selection.addRange(range);
+          try{ document.execCommand('copy'); copyBtn.textContent = 'Copied'; setTimeout(()=> copyBtn.textContent = 'Copy',1400)}catch(_){ alert('Copy failed — select the text manually.'); }
+        }
+      });
+
+      // download behavior
+      downloadBtn.addEventListener('click', ()=>{
+        try{
+          const text = pre.textContent || '';
+          const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          const safeTitle = (pre.getAttribute('data-title') || 'log').replace(/[^a-z0-9._-]/ig, '_');
+          a.download = `${safeTitle}.txt`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 300);
+        }catch(e){
+          alert('Download failed: ' + (e && e.message ? e.message : 'Unknown'));
+        }
+      });
+
+      // collapse behavior — toggle max-height on formatted or raw view
+      let collapsed = false;
+      collapseBtn.addEventListener('click', ()=>{
+        const visible = (formatted.style.display === 'none') ? pre : formatted;
+        if(!collapsed){
+          visible.style.maxHeight = '88px';
+          visible.style.overflow = 'hidden';
+          collapseBtn.textContent = '▸';
+          collapsed = true;
+        }else{
+          visible.style.maxHeight = '';
+          visible.style.overflow = 'auto';
+          collapseBtn.textContent = '▾';
+          collapsed = false;
+        }
+      });
+
+      // rawToggle initial state (formatted shown)
+      rawToggle.textContent = 'Raw';
+
+      // raw toggle behavior: switch between formatted preview and raw pre
+      rawToggle.addEventListener('click', ()=>{
+        if(pre.style.display === 'none'){
+          pre.style.display = '';
+          formatted.style.display = 'none';
+          rawToggle.textContent = 'Rendered';
+        }else{
+          pre.style.display = 'none';
+          formatted.style.display = '';
+          rawToggle.textContent = 'Raw';
+        }
+      });
+    });
+  }
+
+  // call enhancement after DOM ready and also when content might change
+  document.addEventListener('DOMContentLoaded', enhanceChatBoxes);
+  // in case accordions open large text after load, run again
+  window.addEventListener('load', ()=> setTimeout(enhanceChatBoxes, 200));
 
   // open all accordions by default for key areas (makes content visible)
   document.addEventListener('DOMContentLoaded', function(){
