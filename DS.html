@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Distributed Payment System — Workspace Summary</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- MathJax for LaTeX formulas -->
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+      svg: {fontCache: 'global'}
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+  <style>
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --accent: #7c3aed;
+      --surface: #071028;
+      --glass: rgba(255,255,255,0.03);
+      --mono: 'SFMono-Regular', Menlo, Monaco, "Roboto Mono", monospace;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#081226 0%, #071025 100%);
+      color:#e6eef8;
+    }
+    .wrap{
+      max-width: 950px;
+      margin: 36px auto;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    h1{
+      margin:0 0 8px 0;
+      font-size: 24px;
+      letter-spacing: -0.2px;
+    }
+    .meta{
+      color:var(--muted);
+      margin-bottom:18px;
+      font-size:13px;
+    }
+
+    section{ margin: 18px 0; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.03); }
+
+    h2{
+      font-size:18px;
+      margin:0 0 10px 0;
+      color:#fff;
+    }
+    h3{
+      margin:8px 0;
+      font-size:15px;
+      color:#dbeafe;
+    }
+
+    p { margin:6px 0 12px 0; color:#d7e7ff; line-height:1.45; }
+    ul { margin:6px 0 12px 24px; }
+    li { margin:6px 0; }
+
+    .code, code, .file {
+      font-family: var(--mono);
+      background: rgba(255,255,255,0.02);
+      padding: 2px 6px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,0.02);
+      font-size:13px;
+      color:#eaf2ff;
+    }
+
+    pre {
+      background: rgba(0,0,0,0.35);
+      padding:12px;
+      border-radius:8px;
+      overflow:auto;
+      font-family: var(--mono);
+      font-size:13px;
+      line-height:1.55;
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      font-size:14px;
+    }
+    th, td {
+      text-align:left;
+      padding:8px 10px;
+    }
+    th {
+      font-weight:600;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+
+    .buttons {
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+    .btn {
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color:#fff;
+      padding:8px 12px;
+      border-radius:8px;
+      border: none;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow: 0 4px 10px rgba(124,58,237,0.18);
+    }
+    .btn.secondary {
+      background: transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow:none;
+      color:var(--muted);
+    }
+    .note { color:var(--muted); font-size:13px; margin-top:8px; }
+
+    /* print styles */
+    @media print{
+      body{ background: #fff; color:#000; }
+      .wrap{ box-shadow:none; border:none; background:transparent; }
+      .btn, .buttons { display:none; }
+      pre { background:#f6f6f6; color:#000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="content">
+    <h1>Distributed Payment System — Workspace Summary</h1>
+    <div class="meta">Concise mapping from workspace code to implemented techniques. Use the buttons to copy into Word.</div>
+
+    <div class="buttons">
+      <button class="btn" id="copyPlain">Copy as Plain Text (best for Word)</button>
+      <button class="btn secondary" id="copyHtml">Copy as Rich HTML</button>
+      <button class="btn secondary" id="toggleMath">Toggle Math Rendering</button>
+    </div>
+    <div class="note">Tip: use "Copy as Plain Text" then paste into Word and apply your Word styles. Use "Copy as Rich HTML" to preserve headings and monospace formatting when pasting.</div>
+
+    <!-- 1 -->
+    <section>
+      <h2>1. Fault Tolerance (Member 1)</h2>
+      <h3>Techniques Used</h3>
+      <ul>
+        <li><span class="code">Redundancy</span>: Multiple servers registered as ZooKeeper ephemeral sequential nodes — <span class="file">payment.faulttolerance.PaymentServer</span>.</li>
+        <li><span class="code">Failure Detection</span>: Watches set on <span class="code">/payment/nodes</span> — see <span class="file">payment.faulttolerance.PaymentClient.watchNodes</span> and the handler in <span class="file">payment.faulttolerance.PaymentServer</span>.</li>
+        <li><span class="code">Liveness Probe</span>: Direct TCP connect health check — <span class="file">payment.datareplication.ReplicationManager.isAlive</span>.</li>
+        <li><span class="code">Automatic Failover</span>: Client prefers leader and iterates fallback nodes on failures — <span class="file">payment.faulttolerance.PaymentClient.sendPayment</span>.</li>
+        <li><span class="code">Recovery on Rejoin</span>: Server re-registers ephemeral sequential znode and attempts WAL catch-up using <span class="file">payment.datareplication.ReplicationManager.fetchWalFrom</span> and <span class="file">payment.datareplication.Ledger.appendFollower</span>.</li>
+      </ul>
+
+      <h3>Notes / Evaluation</h3>
+      <p>ZooKeeper ephemeral nodes provide robust membership/failure signals but require a running ZooKeeper ensemble. Redundancy increases network/CPU/storage overhead; snapshot/WAL rotation mitigates unbounded WAL growth (see <span class="file">payment.datareplication.Ledger.maybeSnapshot</span>).</p>
+    </section>
+
+    <!-- 2 -->
+    <section>
+      <h2>2. Data Replication and Consistency (Member 2)</h2>
+      <h3>Strategy Implemented</h3>
+      <ul>
+        <li><strong>Primary-backup leader-based synchronous fan-out replication</strong>: leader applies locally then calls <span class="file">payment.datareplication.ReplicationManager.replicateAndCount</span> to send <span class="code">REPLSEQ</span> to followers.</li>
+        <li><strong>Leader detection</strong>: lexicographic znode order under <span class="code">/payment/nodes</span> — see <span class="file">payment.datareplication.ReplicationManager.getLeaderNode</span> and <span class="file">payment.faulttolerance.PaymentServer.updateLeaderStatus</span>.</li>
+      </ul>
+
+      <h3>Consistency Model & Trade-offs</h3>
+      <p>Implementation favors <strong>strong consistency</strong>: leader waits for follower ACKs before committing (see <span class="file">payment.faulttolerance.PaymentServer.handleClient</span> → <span class="file">replicateAndCount</span>).</p>
+
+      <p><strong>Quorum formula:</strong></p>
+      <p class="code">Quorum = ⌊N/2⌋ + 1</p>
+      <p>In LaTeX: <span>$\displaystyle \text{Quorum} = \left\lfloor \frac{N}{2} \right\rfloor + 1$</span></p>
+
+      <p><strong>Latency approximation:</strong></p>
+      <p class="code">L ≈ L<sub>local</sub> + max<sub>i</sub>(RTT<sub>i</sub> + L<sub>follower_apply</sub>)</p>
+      <p>In LaTeX: <span>$\displaystyle L \approx L_{\text{local}} + \max_i(\mathrm{RTT}_i + L_{\text{follower\_apply}})$</span></p>
+
+      <h3>Deduplication</h3>
+      <p>Idempotency keys persisted in <span class="file">ids.txt</span> and an in-memory map <span class="code">entries</span> — see <span class="file">Ledger.appendLeader</span> and <span class="file">Ledger.appendFollower</span>.</p>
+
+      <h3>Performance & Storage</h3>
+      <ul>
+        <li>Present: WAL + durable <span class="code">fsync</span>, snapshot rotation (<span class="file">Ledger.maybeSnapshot</span>).</li>
+        <li>Suggested: configurable quorum, batching, async replication with durable local commit and background replication to reduce latency.</li>
+      </ul>
+    </section>
+
+    <!-- 3 -->
+    <section>
+      <h2>3. Time Synchronization (Member 3)</h2>
+      <h3>Techniques Implemented</h3>
+      <ul>
+        <li>Lightweight SNTP-like offset estimation: <span class="file">payment.timesync.TimeSync</span> computes <span class="code">serverTime - localTime</span>.</li>
+        <li>Log buffering & reordering using corrected timestamps: <span class="file">payment.timesync.LogReorderer</span> and <span class="file">payment.timesync.LogEntry</span>.</li>
+        <li>Integration: <span class="file">PaymentServer</span> uses TimeSync + LogReorderer to periodically flush ordered logs to disk.</li>
+      </ul>
+
+      <h3>Analysis & Trade-offs</h3>
+      <p>Clock skew causes misordering; the <span class="file">LogReorderer</span> buffers events within a window (configurable <span class="code">windowMs</span>) to emit corrected order. Single-sample SNTP is low-overhead but noisy; multi-sample SNTP or host NTP/chrony improves accuracy.</p>
+
+      <h3>Improvements to Consider</h3>
+      <ul>
+        <li>Run host NTP/chrony (recommended).</li>
+        <li>Use multi-sample SNTP with min-RTT selection.</li>
+        <li>Consider Hybrid Logical Clocks (HLC) for causal ordering.</li>
+      </ul>
+    </section>
+
+    <!-- 4 -->
+    <section>
+      <h2>4. Consensus and Agreement Algorithms (Member 4)</h2>
+      <h3>Implemented</h3>
+      <ul>
+        <li>Simulated Raft in-process: <span class="file">payment.consensus.RaftNode</span>, <span class="file">payment.consensus.RaftLogEntry</span>, harness <span class="file">payment.consensus.RaftHarness</span>, GUI <span class="file">payment.TestControlPanel</span>.</li>
+        <li>ZooKeeper-based leader election: smallest lexicographic znode under <span class="code">/payment/nodes</span> — see <span class="file">PaymentServer.updateLeaderStatus</span>.</li>
+      </ul>
+
+      <h3>Evaluation</h3>
+      <p>The Raft simulation is great for experiments (leader election, heartbeats) but is in-memory (no durable logs, not networked). For production use persistent Raft or leverage ZooKeeper/etcd + a durable replication protocol.</p>
+
+      <h3>Performance & Testing</h3>
+      <p>Consensus overhead grows with higher rates. Optimizations: batching, pipeline replication, leader leases, faster RPCs. The provided harness and GUI allow crash/recover simulation but don't model network partitions or disk failures.</p>
+    </section>
+
+    <!-- Key files -->
+    <section>
+      <h2>Key Source Files</h2>
+      <table>
+        <tr><th>Area</th><th>Key Files</th></tr>
+        <tr><td>Fault tolerance & client/server</td><td><span class="file">payment.faulttolerance.PaymentServer</span>, <span class="file">payment.faulttolerance.PaymentClient</span></td></tr>
+        <tr><td>Replication & ledger</td><td><span class="file">payment.datareplication.ReplicationManager</span>, <span class="file">payment.datareplication.Ledger</span></td></tr>
+        <tr><td>Time sync & log ordering</td><td><span class="file">payment.timesync.TimeSync</span>, <span class="file">payment.timesync.LogReorderer</span>, <span class="file">payment.timesync.LogEntry</span></td></tr>
+        <tr><td>Consensus & UI</td><td><span class="file">payment.consensus.RaftNode</span>, <span class="file">payment.consensus.RaftLogEntry</span>, <span class="file">payment.consensus.RaftHarness</span>, <span class="file">payment.TestControlPanel</span></td></tr>
+        <tr><td>Design overview</td><td><span class="file">README.md</span></td></tr>
+      </table>
+    </section>
+
+    <!-- Optional improvements -->
+    <section>
+      <h2>Optional Improvements</h2>
+      <ul>
+        <li>Add majority-only quorum configuration.</li>
+        <li>Implement multi-sample SNTP loop in TimeSync.</li>
+        <li>Persist Raft logs for durable consensus.</li>
+      </ul>
+
+      <p style="margin-top:10px;">Would you like me to produce a ready-to-download <strong>.docx</strong> file formatted from this HTML? I can also tweak fonts, add your company header, or export printer-ready PDF.</p>
+    </section>
+
+  </div>
+
+  <script>
+    // Utility: get plain text from the content for copying
+    function getPlainText(root){
+      // Convert mathjax elements (SVG) to their TeX source if present,
+      // but for simplicity we return the textContent which is good for Word.
+      const clone = root.cloneNode(true);
+      // Replace code/file spans with backticks for plain text readability
+      clone.querySelectorAll('span.code, span.file, code').forEach(el=>{
+        const txt = el.textContent;
+        const wrapper = document.createElement('span');
+        wrapper.textContent = '`' + txt + '`';
+        el.parentNode.replaceChild(wrapper, el);
+      });
+      // Remove buttons/notes if present
+      clone.querySelectorAll('.buttons, .note').forEach(n=>n.remove());
+      return clone.textContent.trim();
+    }
+
+    document.getElementById('copyPlain').addEventListener('click', async ()=>{
+      const txt = getPlainText(document.getElementById('content'));
+      try {
+        await navigator.clipboard.writeText(txt);
+        alert('Plain text copied. Paste into Word (Ctrl+V).');
+      } catch(e){
+        alert('Copy failed. Select the content and press Ctrl+C manually.');
+      }
+    });
+
+    document.getElementById('copyHtml').addEventListener('click', async ()=>{
+      // copy the innerHTML so Word can paste rich content
+      const html = document.getElementById('content').innerHTML;
+      // Create a blob with HTML and write to clipboard if supported
+      try {
+        // Modern Clipboard API copy as HTML (may not be supported in all browsers)
+        const blob = new Blob([html], {type: 'text/html'});
+        const data = [new ClipboardItem({'text/html': blob})];
+        await navigator.clipboard.write(data);
+        alert('Rich HTML copied. Paste into Word (Ctrl+V).');
+      } catch(e){
+        // fallback: copy text (loses formatting)
+        try { await navigator.clipboard.writeText(document.getElementById('content').innerText); alert('Fallback: plain text copied.'); }
+        catch(_) { alert('Copy failed. Select the content and press Ctrl+C manually.'); }
+      }
+    });
+
+    // Toggle math rendering (re-typeset)
+    document.getElementById('toggleMath').addEventListener('click', ()=>{
+      if(window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise();
+        alert('Math re-rendered (if needed).');
+      } else {
+        alert('MathJax not loaded yet or not supported in this browser.');
+      }
+    });
+
+    // On load, ensure MathJax runs at least once (async)
+    window.addEventListener('load', ()=>{
+      if(window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise().catch(()=>{/* ignore */});
+      }
+    });
+  </script>
+</body>
+</html>
